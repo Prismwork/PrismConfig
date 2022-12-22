@@ -14,10 +14,10 @@ public interface DefaultSerializers {
      * If the instance cache does not exist, it will try to create one.
      */
     static DefaultSerializers getInstance() {
-        return Objects.requireNonNullElseGet(
-                DefaultSerializersImpl.INSTANCE_CACHE,
-                DefaultSerializersImpl::new
-        );
+        if (DefaultSerializersImpl.INSTANCE_CACHE != null) {
+            return DefaultSerializersImpl.INSTANCE_CACHE;
+        }
+        return new DefaultSerializersImpl();
     }
 
     /**

@@ -14,10 +14,10 @@ public interface DefaultDeserializers {
      * If the instance cache does not exist, it will try to create one.
      */
     static DefaultDeserializers getInstance() {
-        return Objects.requireNonNullElseGet(
-                DefaultDeserializersImpl.INSTANCE_CACHE,
-                DefaultDeserializersImpl::new
-        );
+        if (DefaultDeserializersImpl.INSTANCE_CACHE != null) {
+            return DefaultDeserializersImpl.INSTANCE_CACHE;
+        }
+        return new DefaultDeserializersImpl();
     }
 
     /**

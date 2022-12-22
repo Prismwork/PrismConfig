@@ -43,10 +43,10 @@ public interface PrismConfig {
      * If the instance cache does not exist, it will try to create one.
      */
     static PrismConfig getInstance() {
-        return Objects.requireNonNullElseGet(
-                PrismConfigImpl.INSTANCE_CACHE,
-                PrismConfigImpl::new
-        );
+        if (PrismConfigImpl.INSTANCE_CACHE != null) {
+            return PrismConfigImpl.INSTANCE_CACHE;
+        }
+        return new PrismConfigImpl();
     }
 
     /**

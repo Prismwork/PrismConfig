@@ -21,9 +21,9 @@ repositories {
 
 dependencies {
     // ...
-    implementation "io.github.prismwork:prismconfig:0.1.0"
+    implementation "io.github.prismwork:prismconfig:0.1.1"
     // Or use the full jar if you don't have the libraries included in your project (Gson, Jankson...)
-    // implementation "io.github.prismwork:prismconfig:0.1.0:all"
+    // implementation "io.github.prismwork:prismconfig:0.1.1:all"
 }
 ```
 
