@@ -76,7 +76,7 @@ java {
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
+        create<MavenPublication>("prismconfig") {
             groupId = "$group"
             artifactId = name
             version = version
