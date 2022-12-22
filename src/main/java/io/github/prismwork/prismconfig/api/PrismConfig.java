@@ -2,6 +2,7 @@ package io.github.prismwork.prismconfig.api;
 
 import io.github.prismwork.prismconfig.impl.PrismConfigImpl;
 
+import java.io.File;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -30,6 +31,8 @@ import java.util.function.Function;
  * }</pre>
  * To serialize comments, Prism Config uses {@link blue.endless.jankson.Comment} from Jankson,
  * so if you want to make your own comment parser, you should use this as well.
+ *
+ * @since 0.1.0
  */
 @SuppressWarnings("unused")
 public interface PrismConfig {
@@ -89,4 +92,26 @@ public interface PrismConfig {
      * @return the content of the config as a string
      */
     <T> String deserializeCached(Class<T> clazz, T content);
+
+    /**
+     * Write the given config instance to the target file as a string representing the config content and cache the deserializer for the given type.
+     *
+     * @param clazz the class of the config instance type
+     * @param content the content of the config as an instance
+     * @param deserializer the deserializer used to parse the config instance
+     * @param file the target file the config is written to
+     * @param <T> the type of the config instance
+     */
+    <T> void deserializeAndWrite(Class<T> clazz, T content, Function<T, String> deserializer, File file);
+
+    /**
+     * Write the given config instance to the target file as a string representing the config content, using the cached deserializer.
+     * <p>If the deserializer for this class is not cached, a {@link RuntimeException} is thrown.
+     *
+     * @param clazz the class of the config instance type
+     * @param content the content of the config as an instance
+     * @param file the target file the config is written to
+     * @param <T> the type of the config instance
+     */
+    <T> void deserializeAndWriteCached(Class<T> clazz, T content, File file);
 }

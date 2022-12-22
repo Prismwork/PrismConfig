@@ -4,6 +4,9 @@ import io.github.prismwork.prismconfig.api.PrismConfig;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -17,8 +20,8 @@ public final class PrismConfigImpl implements PrismConfig {
     private final Map<Class<?>, Function<Object, String>> cachedDeserializers;
 
     public PrismConfigImpl() {
-        cachedSerializers = new HashMap<>();
-        cachedDeserializers = new HashMap<>();
+        this.cachedSerializers = new HashMap<>();
+        this.cachedDeserializers = new HashMap<>();
         PrismConfigImpl.INSTANCE_CACHE = this;
     }
 
@@ -48,5 +51,34 @@ public final class PrismConfigImpl implements PrismConfig {
     public <T> String deserializeCached(Class<T> clazz, T content) {
         if (!cachedDeserializers.containsKey(clazz)) throw new RuntimeException("Cached deserializer not found");
         return cachedDeserializers.get(clazz).apply(content);
+    }
+
+    @Override
+    public <T> void deserializeAndWrite(Class<T> clazz, T content, Function<T, String> deserializer, File file) {
+        String string = deserialize(clazz, content, deserializer);
+        writeToConfigFile(file, string);
+    }
+
+    @Override
+    public <T> void deserializeAndWriteCached(Class<T> clazz, T content, File file) {
+        String string = deserializeCached(clazz, content);
+        writeToConfigFile(file, string);
+    }
+
+    private void writeToConfigFile(File file, String string) {
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create file", e);
+            }
+        }
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(""); // Empty the file
+            writer.write(string);
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write config");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.prismwork.prismconfig.impl.config;
 
 import blue.endless.jankson.Jankson;
+import blue.endless.jankson.JsonElement;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.prismwork.prismconfig.api.config.DefaultDeserializers;
@@ -27,6 +28,6 @@ public final class DefaultDeserializersImpl implements DefaultDeserializers {
 
     @Override
     public <T> Function<T, String> json5(Class<T> clazz) {
-        return (config) -> jankson.toJson(config).toJson();
+        return (config) -> jankson.toJson(config).toJson(true, true);
     }
 }

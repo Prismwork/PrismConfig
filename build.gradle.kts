@@ -47,6 +47,14 @@ dependencies {
     implementation("blue.endless:jankson:1.2.1")
     include("blue.endless:jankson:1.2.1")
     // implementation("org.quiltmc:quilt-json5:1.0.2")
+
+    /* Test */
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+}
+
+tasks.getByName<Test>("test") {
+    useJUnitPlatform()
 }
 
 tasks.jar {
@@ -78,6 +86,7 @@ publishing {
     }
 
     repositories {
+        mavenLocal()
         if (System.getenv("MAVEN_USERNAME") != null && System.getenv("MAVEN_PASSWORD") != null) {
             maven {
                 name = "release"

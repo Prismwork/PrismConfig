@@ -8,6 +8,7 @@ import com.google.gson.JsonSyntaxException;
 import io.github.prismwork.prismconfig.api.config.DefaultSerializers;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
 public final class DefaultSerializersImpl implements DefaultSerializers {
@@ -26,8 +27,16 @@ public final class DefaultSerializersImpl implements DefaultSerializers {
     public <T> Function<String, T> json(Class<T> clazz) {
         return (content) -> {
             try {
-                return gson.fromJson(content, clazz);
-            } catch (JsonSyntaxException e) {
+                T ret = gson.fromJson(content, clazz);
+                if (ret == null) {
+                    return clazz.getDeclaredConstructor().newInstance();
+                }
+                return ret;
+            } catch (JsonSyntaxException |
+                     InvocationTargetException |
+                     InstantiationException |
+                     IllegalAccessException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException("Failed to parse JSON", e);
             }
         };
@@ -37,8 +46,16 @@ public final class DefaultSerializersImpl implements DefaultSerializers {
     public <T> Function<String, T> json5(Class<T> clazz) {
         return (content) -> {
             try {
-                return jankson.fromJson(content, clazz);
-            } catch (SyntaxError e) {
+                T ret = jankson.fromJson(content, clazz);
+                if (ret == null) {
+                    return clazz.getDeclaredConstructor().newInstance();
+                }
+                return ret;
+            } catch (SyntaxError |
+                     InvocationTargetException |
+                     InstantiationException |
+                     IllegalAccessException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException("Failed to parse JSON5", e);
             }
         };
