@@ -4,11 +4,12 @@ import blue.endless.jankson.Jankson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.prismwork.prismconfig.api.config.DefaultDeserializers;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
 public final class DefaultDeserializersImpl implements DefaultDeserializers {
-    public static DefaultDeserializers INSTANCE_CACHE;
+    public static @Nullable DefaultDeserializers INSTANCE_CACHE;
 
     private final Gson gson;
     private final Jankson jankson;

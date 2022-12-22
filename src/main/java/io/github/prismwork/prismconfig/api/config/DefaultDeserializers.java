@@ -5,6 +5,7 @@ import io.github.prismwork.prismconfig.impl.config.DefaultDeserializersImpl;
 import java.util.Objects;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public interface DefaultDeserializers {
     /**
      * Lazily get the instance of {@link DefaultDeserializers}.

@@ -5,6 +5,7 @@ import io.github.prismwork.prismconfig.impl.config.DefaultSerializersImpl;
 import java.util.Objects;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public interface DefaultSerializers {
     /**
      * Lazily get the instance of {@link DefaultSerializers}.

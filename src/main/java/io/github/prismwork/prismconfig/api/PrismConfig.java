@@ -31,6 +31,7 @@ import java.util.function.Function;
  * To serialize comments, Prism Config uses {@link blue.endless.jankson.Comment} from Jankson,
  * so if you want to make your own comment parser, you should use this as well.
  */
+@SuppressWarnings("unused")
 public interface PrismConfig {
     /**
      * Lazily get the instance of {@link PrismConfig}.
@@ -46,7 +47,7 @@ public interface PrismConfig {
     }
 
     /**
-     * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter.
+     * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter and cache the serializer for the given type.
      *
      * @param clazz the class of the config instance type
      * @param content the content of the config as a string
@@ -57,7 +58,18 @@ public interface PrismConfig {
     <T> T serialize(Class<T> clazz, String content, Function<String, T> serializer);
 
     /**
-     * Convert the given config instance to a string representing the config content.
+     * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter, using the cached serializer.
+     * <p>If the serializer for this class is not cached, a {@link RuntimeException} is thrown.
+     *
+     * @param clazz the class of the config instance type
+     * @param content the content of the config as a string
+     * @param <T> the type of the config instance
+     * @return an instance of the config
+     */
+    <T> T serializeCached(Class<T> clazz, String content);
+
+    /**
+     * Convert the given config instance to a string representing the config content and cache the deserializer for the given type.
      *
      * @param clazz the class of the config instance type
      * @param content the content of the config as an instance
@@ -66,4 +78,15 @@ public interface PrismConfig {
      * @return the content of the config as a string
      */
     <T> String deserialize(Class<T> clazz, T content, Function<T, String> deserializer);
+
+    /**
+     * Convert the given config instance to a string representing the config content, using the cached deserializer.
+     * <p>If the deserializer for this class is not cached, a {@link RuntimeException} is thrown.
+     *
+     * @param clazz the class of the config instance type
+     * @param content the content of the config as an instance
+     * @param <T> the type of the config instance
+     * @return the content of the config as a string
+     */
+    <T> String deserializeCached(Class<T> clazz, T content);
 }
