@@ -4,6 +4,7 @@ plugins {
     id("java")
     id("maven-publish")
     id("com.github.johnrengelman.shadow").version("7.1.2")
+    id("com.modrinth.minotaur").version("2.+")
 }
 
 group = "io.github.prismwork"
@@ -79,6 +80,43 @@ java {
     withSourcesJar()
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+modrinth {
+    token.set(System.getenv("MODRINTH_TOKEN"))
+    projectId.set("prism-config")
+    versionNumber.set("$version")
+    versionName.set("Prism Config $version")
+    versionType.set("release")
+    uploadFile.set(tasks.shadowJar as Any)
+    changelog.set(file("CHANGELOG.md").readText())
+    detectLoaders.set(false)
+    gameVersions.addAll(
+        "1.14",
+        "1.14.1",
+        "1.14.2",
+        "1.14.3",
+        "1.14.4",
+        "1.15",
+        "1.15.1",
+        "1.15.2",
+        "1.16",
+        "1.16.1",
+        "1.16.2",
+        "1.16.3",
+        "1.16.4",
+        "1.16.5",
+        "1.17",
+        "1.17.1",
+        "1.18",
+        "1.18.1",
+        "1.18.2",
+        "1.19",
+        "1.19.1",
+        "1.19.2",
+        "1.19.3"
+    )
+    loaders.addAll("fabric", "forge", "quilt")
 }
 
 publishing {
