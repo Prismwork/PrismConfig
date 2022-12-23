@@ -79,3 +79,9 @@ PrismConfig.getInstance().serialize(
         }
 );
 ```
+
+### Libraries Used
+
+* [Jankson](https://github.com/falkreon/Jankson) by falkreon, licensed under MIT.
+* [Gson](https://github.com/google/gson) by Google, licensed under Apache-2.0.
+* [toml4j](https://github.com/mwanji/toml4j) by Moandji Ezana, licensed under MIT.
