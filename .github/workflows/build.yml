@@ -7,25 +7,25 @@ jobs:
       matrix:
         # Use these Java versions
         java: [17]
-        os: [ubuntu-20.04]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: validate gradle wrapper
+      - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: setup jdk ${{ matrix.java }}
+      - name: Setup JDK ${{ matrix.java }}
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - name: make gradle wrapper executable
+      - name: Make Gradle Wrapper Executable
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
-      - name: build
+      - name: Build
         run: ./gradlew build
-      - name: capture build artifacts
+      - name: Capture Build Artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v2
         with:
-          name: Artifacts
+          name: Prism Config - Dev Build
           path: build/libs/
