@@ -1,9 +1,11 @@
 package io.github.prismwork.prismconfig.api;
 
 import io.github.prismwork.prismconfig.impl.PrismConfigImpl;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.Objects;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
 /**
@@ -61,6 +63,31 @@ public interface PrismConfig {
     <T> T serialize(Class<T> clazz, String content, Function<String, T> serializer);
 
     /**
+     * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter and cache the serializer for the given type.
+     *
+     * @param clazz the class of the config instance type
+     * @param file the content of the config as a file
+     * @param serializer the serializer used to parse the config string
+     * @param <T> the type of the config instance
+     * @return an instance of the config
+     */
+    default <T> T serialize(Class<T> clazz, File file, Function<String, T> serializer) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String content = Utils.readFromFile(reader);
+            return serialize(clazz, content, serializer);
+        } catch (IOException e) {
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (InvocationTargetException |
+                     InstantiationException |
+                     IllegalAccessException |
+                     NoSuchMethodException ex) {
+                throw new RuntimeException("Failed to parse config", ex);
+            }
+        }
+    }
+
+    /**
      * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter, using the cached serializer.
      * <p>If the serializer for this class is not cached, a {@link RuntimeException} is thrown.
      *
@@ -70,6 +97,30 @@ public interface PrismConfig {
      * @return an instance of the config
      */
     <T> T serializeCached(Class<T> clazz, String content);
+
+    /**
+     * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter and cache the serializer for the given type.
+     *
+     * @param clazz the class of the config instance type
+     * @param file the content of the config as a file
+     * @param <T> the type of the config instance
+     * @return an instance of the config
+     */
+    default <T> T serializeCached(Class<T> clazz, File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String content = Utils.readFromFile(reader);
+            return serializeCached(clazz, content);
+        } catch (IOException e) {
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (InvocationTargetException |
+                     InstantiationException |
+                     IllegalAccessException |
+                     NoSuchMethodException ex) {
+                throw new RuntimeException("Failed to parse config", ex);
+            }
+        }
+    }
 
     /**
      * Convert the given config instance to a string representing the config content and cache the deserializer for the given type.
@@ -102,7 +153,10 @@ public interface PrismConfig {
      * @param file the target file the config is written to
      * @param <T> the type of the config instance
      */
-    <T> void deserializeAndWrite(Class<T> clazz, T content, Function<T, String> deserializer, File file);
+    default <T> void deserializeAndWrite(Class<T> clazz, T content, Function<T, String> deserializer, File file) {
+        String string = deserialize(clazz, content, deserializer);
+        Utils.writeToConfigFile(file, string);
+    }
 
     /**
      * Write the given config instance to the target file as a string representing the config content, using the cached deserializer.
@@ -113,5 +167,42 @@ public interface PrismConfig {
      * @param file the target file the config is written to
      * @param <T> the type of the config instance
      */
-    <T> void deserializeAndWriteCached(Class<T> clazz, T content, File file);
+    default <T> void deserializeAndWriteCached(Class<T> clazz, T content, File file) {
+        String string = deserializeCached(clazz, content);
+        Utils.writeToConfigFile(file, string);
+    }
+
+    @ApiStatus.Internal
+    class Utils {
+        private static @NotNull String readFromFile(@NotNull BufferedReader reader) throws IOException {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            String ls = System.getProperty("line.separator");
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append(ls);
+            }
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            reader.close();
+
+            return stringBuilder.toString();
+        }
+
+        private static void writeToConfigFile(@NotNull File file, String string) {
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to create file", e);
+                }
+            }
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(""); // Empty the file
+                writer.write(string);
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to write config");
+            }
+        }
+    }
 }

@@ -56,6 +56,33 @@ public class PrismConfigTest {
                 DefaultDeserializers.getInstance().json5(TestConfig.class),
                 configFile1
         );
+
+        TestConfig config2 = PrismConfig.getInstance().serialize(
+                TestConfig.class,
+                configFile1,
+                DefaultSerializers.getInstance().json5(TestConfig.class)
+        );
+        System.out.println(config2.bool1);
+
+        File configFile2 = new File("config2.toml");
+        if (!configFile2.exists()) {
+            try {
+                configFile2.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        PrismConfig.getInstance().deserializeAndWrite(
+                TestConfig.class,
+                config2,
+                DefaultDeserializers.getInstance().toml(TestConfig.class),
+                configFile2
+        );
+        System.out.println(PrismConfig.getInstance().serialize(
+                TestConfig.class,
+                configFile2,
+                DefaultSerializers.getInstance().toml(TestConfig.class)
+        ).nested.hello);
     }
 
     public static class TestConfig {
@@ -63,5 +90,11 @@ public class PrismConfigTest {
         public boolean bool2 = true;
         @Comment("Hello from comment")
         public String string = "Hi";
+        public SimpleNested nested = new SimpleNested();
+
+        public static class SimpleNested {
+            public String hello = "Hello from nested";
+            public int number = 114514;
+        }
     }
 }

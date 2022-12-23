@@ -1,5 +1,8 @@
 # Prism Config
 
+![java8](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/built-with/java8_vector.svg)
+![gradle](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/built-with/gradle_vector.svg)
+
 A lightweight config library for Java to let you write your config elegantly and flexibly.
 
 ### Getting Started
@@ -21,13 +24,13 @@ repositories {
 
 dependencies {
     // ...
-    implementation "io.github.prismwork:prismconfig:0.1.1"
-    // Or use the full jar if you don't have the libraries included in your project (Gson, Jankson...)
-    // implementation "io.github.prismwork:prismconfig:0.1.1:all"
+    implementation "io.github.prismwork:prismconfig:0.2.0:all"
+    // Or use the slim jar if you have the libraries included in your project (Gson, Jankson...)
+    // implementation "io.github.prismwork:prismconfig:0.2.0"
 }
 ```
 
-Prism Config by default provides serializers and deserializers for JSON (Gson) and JSON5 (Jankson).
+Prism Config by default provides serializers and deserializers for JSON (Gson), JSON5 (Jankson) and TOML 0.4.0 (toml4j).
 
 To parse a config from string into object, you can do this:
 

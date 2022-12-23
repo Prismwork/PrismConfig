@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.prismwork"
-version = "0.1.1"
+version = property("project_version")!!
 
 val include: Configuration by configurations.creating
 
@@ -20,6 +20,7 @@ tasks.named<ShadowJar>("shadowJar") {
     configurations = listOf(include)
     relocate("blue.endless.jankson", relocatePackage("jankson"))
     relocate("com.google.gson", relocatePackage("gson"))
+    relocate("com.moandjiezana.toml", relocatePackage("toml4j"))
     relocate("org.jetbrains.annotations", relocatePackage("jb.annotations"))
     relocate("org.intellij.lang.annotations", relocatePackage("ij.annotations"))
 }
@@ -27,26 +28,30 @@ tasks.named<ShadowJar>("shadowJar") {
 repositories {
     mavenCentral()
     maven {
-        name = "QuiltMC Release"
+        name = "QuiltMC Release" // quilt-json5, though unused
         url = uri("https://maven.quiltmc.org/repository/release/")
     }
     maven {
-        name = "QuiltMC Snapshot"
+        name = "QuiltMC Snapshot" // quilt-json5, though unused
         url = uri("https://maven.quiltmc.org/repository/snapshot/")
+    }
+    maven {
+        name = "unascribed" // kdl4j, though unused
+        url = uri("https://repo.unascribed.com/")
     }
 }
 
 dependencies {
     /* Utilities */
-    implementation("org.jetbrains:annotations:23.1.0")
-    include("org.jetbrains:annotations:23.1.0")
+    include("org.jetbrains:annotations:23.1.0")?.let { implementation(it) }
 
     /* Serialization */
-    implementation("com.google.code.gson:gson:2.10")
-    include("com.google.code.gson:gson:2.10")
-    implementation("blue.endless:jankson:1.2.1")
-    include("blue.endless:jankson:1.2.1")
-    // implementation("org.quiltmc:quilt-json5:1.0.2")
+    include("com.google.code.gson:gson:2.10")?.let { implementation(it) }
+    include("blue.endless:jankson:1.2.1")?.let { implementation(it) }
+    include("com.moandjiezana.toml:toml4j:0.7.2")?.let { implementation(it) }
+    // include("org.yaml:snakeyaml:1.33")?.let { implementation(it) }
+    // include("dev.hbeck.kdl:kdl4j:0.2.0")?.let { implementation(it) }
+    // include("org.quiltmc:quilt-json5:1.0.2")?.let { implementation(it) }
 
     /* Test */
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")

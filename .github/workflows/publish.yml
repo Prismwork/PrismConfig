@@ -1,0 +1,45 @@
+name: build
+on:
+  push:
+    paths:
+      - 'gradle.properties'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        # Use these Java versions
+        java: [17]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Setup jdk ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Make Gradle Wrapper Executable
+        if: ${{ runner.os != 'Windows' }}
+        run: chmod +x ./gradlew
+      - name: Get Project Version
+        id: project_version
+        run: grep "project_version" gradle.properties | sed "s/\s//g" >> $GITHUB_OUTPUT
+      - name: Publish
+        run: ./gradlew build publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.project_version.outputs.project_version }}
+          release_name: Prism Config ${{ steps.project_version.outputs.project_version }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
