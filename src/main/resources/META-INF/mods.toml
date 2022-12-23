@@ -1,0 +1,11 @@
+modLoader="javafml"
+loaderVersion="[26,)"
+license="MIT"
+[[mods]]
+modId="prismconfig"
+version="0.2.0"
+displayName="Prism Config"
+authors="Prismwork"
+description='''
+A lightweight config library for Java to let you write your config elegantly and flexibly.
+'''
