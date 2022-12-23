@@ -7,8 +7,9 @@ A lightweight config library for Java to let you write your config elegantly and
 
 ### Getting Started
 
-To add Prism Config to your project, you need to add following into your `build.gradle`:
+To add Prism Config to your project, you need to add following into your `build.gradle(.kts)`:
 
+Groovy DSL:
 ```groovy
 repositories {
     // ...
@@ -27,6 +28,28 @@ dependencies {
     implementation "io.github.prismwork:prismconfig:0.2.0:all"
     // Or use the slim jar if you have the libraries included in your project (Gson, Jankson...)
     // implementation "io.github.prismwork:prismconfig:0.2.0"
+}
+```
+
+Kotlin DSL:
+```kotlin
+repositories {
+    // ...
+    maven {
+        name = "Nova Committee - Release"
+        url = uri("https://maven.nova-committee.cn/releases/")
+    }
+    maven {
+        name = "Nova Committee - Snapshot"
+        url = uri("https://maven.nova-committee.cn/snapshots/")
+    }
+}
+
+dependencies {
+    // ...
+    implementation("io.github.prismwork:prismconfig:0.2.0:all")
+    // Or use the slim jar if you have the libraries included in your project (Gson, Jankson...)
+    // implementation("io.github.prismwork:prismconfig:0.2.0")
 }
 ```
 
