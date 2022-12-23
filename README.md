@@ -116,4 +116,8 @@ PrismConfig.getInstance().serialize(
 * [Gson](https://github.com/google/gson) by Google, licensed under Apache-2.0.
 * [toml4j](https://github.com/mwanji/toml4j) by Moandji Ezana, licensed under MIT.
 
+### Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Prismwork/PrismConfig&type=Date)](https://star-history.com/#Prismwork/PrismConfig)
+
 [releases]: https://github.com/Prismwork/PrismConfig/releases

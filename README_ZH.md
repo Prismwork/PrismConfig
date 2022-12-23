@@ -69,7 +69,7 @@ String content;
 MyConfig config = PrismConfig.getInstance().serialize(
         MyConfig.class,
         content,
-        DefaultSerializers.getInstance().json5(MyConfig.class) // We assume that your config is written in JSON5
+        DefaultSerializers.getInstance().json5(MyConfig.class) // 我们假定你的配置文件是用 JSON5 编写的
 );
 ```
 
@@ -80,7 +80,7 @@ MyConfig content;
 String config = PrismConfig.getInstance().deserialize(
         MyConfig.class,
         content,
-        DefaultDeserializers.getInstance().json5(MyConfig.class) // We assume that your config is written in JSON5
+        DefaultDeserializers.getInstance().json5(MyConfig.class) // 我们假定你的配置文件是用 JSON5 编写的
 );
 ```
 
@@ -92,7 +92,7 @@ File configFile;
 PrismConfig.getInstance().deserializeAndWrite(
         MyConfig.class,
         content,
-        DefaultDeserializers.getInstance().json5(MyConfig.class), // We assume that your config is written in JSON5
+        DefaultDeserializers.getInstance().json5(MyConfig.class), // 我们假定你的配置文件是用 JSON5 编写的
         configFile
 );
 ```
@@ -105,7 +105,7 @@ PrismConfig.getInstance().serialize(
         MyConfig.class,
         content,
         (string) -> {
-            // Do your own parsing here
+            // 在此自行解析
         }
 );
 ```
@@ -115,5 +115,9 @@ PrismConfig.getInstance().serialize(
 * falkreon 制作的 [Jankson](https://github.com/falkreon/Jankson)，以 MIT 协议开源。
 * Google 制作的 [Gson](https://github.com/google/gson)，以 Apache-2.0 协议开源。
 * Moandji Ezana 制作的 [toml4j](https://github.com/mwanji/toml4j)，以 MIT 协议开源。
+
+### 星标历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Prismwork/PrismConfig&type=Date)](https://star-history.com/#Prismwork/PrismConfig)
 
 [releases]: https://github.com/Prismwork/PrismConfig/releases
