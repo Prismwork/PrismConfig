@@ -6,15 +6,15 @@
 ![gradle](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@2/assets/cozy/built-with/gradle_vector.svg)
 [![Release](https://img.shields.io/github/v/release/Prismwork/PrismConfig?style=for-the-badge&include_prereleases&sort=semver)][releases]
 
-**English** | [简体中文](README_ZH.md)
+[English](README.md) | **简体中文**
 
-A lightweight config library for Java to let you write your config elegantly and flexibly.
+让你能够高效且优雅地编写你的配置文件的轻量级配置库。
 
 </div>
 
-### Getting Started
+### 与我共舞
 
-To add Prism Config to your project, you need to add following into your `build.gradle(.kts)`:
+要将 Prism Config 加入你的项目，需要在你的 `build.gradle(.kts)` 中加入以下内容:
 
 Groovy DSL:
 ```groovy
@@ -33,7 +33,7 @@ repositories {
 dependencies {
     // ...
     implementation "io.github.prismwork:prismconfig:0.2.0:all"
-    // Or use the slim jar if you have the libraries included in your project (Gson, Jankson...)
+    // 如果你已经在你的项目中包含了 Prism Config 所需要的库的话，也可以选用较小的 Jar。 (Gson, Jankson...)
     // implementation "io.github.prismwork:prismconfig:0.2.0"
 }
 ```
@@ -55,14 +55,14 @@ repositories {
 dependencies {
     // ...
     implementation("io.github.prismwork:prismconfig:0.2.0:all")
-    // Or use the slim jar if you have the libraries included in your project (Gson, Jankson...)
+    // 如果你已经在你的项目中包含了 Prism Config 所需要的库的话，也可以选用较小的 Jar。 (Gson, Jankson...)
     // implementation("io.github.prismwork:prismconfig:0.2.0")
 }
 ```
 
-Prism Config by default provides serializers and deserializers for JSON (Gson), JSON5 (Jankson) and TOML 0.4.0 (toml4j).
+Prism Config 默认提供了适用于 JSON (Gson)，JSON5 (Jankson) 和 TOML 0.4.0 (toml4j) 的序列化器和反序列化器。
 
-To parse a config from string into object, you can do this:
+可以通过以下代码来实现把字符串转换成配置文件对象:
 
 ```java
 String content;
@@ -73,7 +73,7 @@ MyConfig config = PrismConfig.getInstance().serialize(
 );
 ```
 
-To parse a config from object into string, you can do this:
+可以通过以下代码来实现把配置文件对象转换成字符串:
 
 ```java
 MyConfig content;
@@ -84,7 +84,7 @@ String config = PrismConfig.getInstance().deserialize(
 );
 ```
 
-You can also write it to a file:
+你也可以把它直接写入文件:
 
 ```java
 MyConfig content;
@@ -97,7 +97,7 @@ PrismConfig.getInstance().deserializeAndWrite(
 );
 ```
 
-To write your own serializer/deserializer, you can use the following code (we use serializing as an example):
+要编写你自己的序列化/反序列化器，你可以使用以下代码（我们以序列化为例）:
 
 ```java
 String content;
@@ -110,10 +110,10 @@ PrismConfig.getInstance().serialize(
 );
 ```
 
-### Libraries Used
+### 使用的库
 
-* [Jankson](https://github.com/falkreon/Jankson) by falkreon, licensed under MIT.
-* [Gson](https://github.com/google/gson) by Google, licensed under Apache-2.0.
-* [toml4j](https://github.com/mwanji/toml4j) by Moandji Ezana, licensed under MIT.
+* falkreon 制作的 [Jankson](https://github.com/falkreon/Jankson)，以 MIT 协议开源。
+* Google 制作的 [Gson](https://github.com/google/gson)，以 Apache-2.0 协议开源。
+* Moandji Ezana 制作的 [toml4j](https://github.com/mwanji/toml4j)，以 MIT 协议开源。
 
 [releases]: https://github.com/Prismwork/PrismConfig/releases
