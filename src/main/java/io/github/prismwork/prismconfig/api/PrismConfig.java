@@ -99,7 +99,8 @@ public interface PrismConfig {
     <T> T serializeCached(Class<T> clazz, String content);
 
     /**
-     * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter and cache the serializer for the given type.
+     * Cast the given config content to an instance of the config whose type is specified by the "clazz" parameter, using the cached serializer.
+     * <p>If the serializer for this class is not cached, a {@link RuntimeException} is thrown.
      *
      * @param clazz the class of the config instance type
      * @param file the content of the config as a file

@@ -51,4 +51,6 @@ public interface DefaultSerializers {
      * @return the TOML serializer for the given config class
      */
     <T> Function<String, T> toml(Class<T> clazz);
+
+    <T> Function<String, T> css(Class<T> clazz);
 }

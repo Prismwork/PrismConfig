@@ -36,6 +36,8 @@ public interface DefaultDeserializers {
 
     /**
      * Returns a JSON5 deserializer for the given config class.
+     * <p>Note that currently JSON5 deserializer only works with
+     * {@link io.github.prismwork.prismconfig.api.annot.Comment.BeforeLine} if you want to add comments.
      *
      * @param clazz the config class the deserializer is going to handle
      * @param <T> the type of the config class

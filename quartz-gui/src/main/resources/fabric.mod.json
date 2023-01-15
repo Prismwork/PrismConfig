@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "quartz_gui",
+  "version": "${version}",
+  "name": "Quartz GUI",
+  "description": "Config screen generation & Mod Menu integration for Prism Config.",
+  "authors": [
+    "Prismwork"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Prismwork/",
+    "sources": "https://github.com/Prismwork/PrismConfig"
+  },
+  "license": "MIT",
+  "icon": "assets/modid/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.prismwork.prismconfig.quartzgui.QuartzGuiClient"
+    ]
+  },
+  "depends": {
+    "java": ">=17",
+    "minecraft": "1.19.x",
+    "fabricloader": ">=0.11.3",
+    "fabric": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

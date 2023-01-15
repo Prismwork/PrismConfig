@@ -1,12 +1,15 @@
 package io.github.prismwork.prismconfig.test;
 
-import blue.endless.jankson.Comment;
 import io.github.prismwork.prismconfig.api.PrismConfig;
+import io.github.prismwork.prismconfig.api.annot.Comment;
 import io.github.prismwork.prismconfig.api.config.DefaultDeserializers;
 import io.github.prismwork.prismconfig.api.config.DefaultSerializers;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class PrismConfigTest {
     @Test
@@ -85,10 +88,12 @@ public class PrismConfigTest {
         ).nested.hello);
     }
 
+    @SuppressWarnings("unused")
     public static class TestConfig {
         public boolean bool1 = false;
         public boolean bool2 = true;
-        @Comment("Hello from comment")
+        @Comment.BeforeLine("Hello from comment\nThis is line two!")
+        @Comment.LineEnd("Hello from line end comment,\nthis does not support new lines :(")
         public String string = "Hi";
         public SimpleNested nested = new SimpleNested();
 

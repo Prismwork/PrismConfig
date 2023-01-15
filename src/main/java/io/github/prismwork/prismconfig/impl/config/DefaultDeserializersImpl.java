@@ -1,15 +1,18 @@
 package io.github.prismwork.prismconfig.impl.config;
 
-import blue.endless.jankson.Comment;
 import blue.endless.jankson.Jankson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moandjiezana.toml.TomlWriter;
+import io.github.prismwork.prismconfig.api.annot.Comment;
 import io.github.prismwork.prismconfig.api.config.DefaultDeserializers;
+import io.github.prismwork.prismconfig.impl.json5.marshall.MarshallerCustomImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -36,25 +39,40 @@ public final class DefaultDeserializersImpl implements DefaultDeserializers {
 
     @Override
     public <T> Function<T, String> json5(Class<T> clazz) {
-        return (config) -> jankson.toJson(config).toJson(true, true);
+        return (config) -> jankson.toJson(config, MarshallerCustomImpl.getFallback()).toJson(true, true);
     }
 
     @Override
     public <T> Function<T, String> toml(Class<T> clazz) {
-        // toml4j does not support adding comments, so we will do our own, using the @Comment from Jankson
+        // toml4j does not support adding comments, so we will do our own
         return (config) -> {
             try {
                 StringBuilder sb = new StringBuilder();
                 for (Field field : clazz.getDeclaredFields()) {
                     field.setAccessible(true); // Make protected and private fields accessible
-                    if (field.isAnnotationPresent(Comment.class)) {
-                        sb.append("# ")
-                                .append(field.getDeclaredAnnotation(Comment.class).value())
-                                .append("\n");
+                    if (!Modifier.isStatic(field.getModifiers())
+                            && !Modifier.isTransient(field.getModifiers())) { // Ignore static fields, we don't need them
+                        if (!field.getType().isPrimitive() && !field.getType().equals(String.class)) {
+                            sb.append("\n"); // Append a new line if the presented field is not of a primitive type or of a string type
+                        }
+                        if (field.isAnnotationPresent(Comment.BeforeLine.class)) {
+                            String value = field.getAnnotation(Comment.BeforeLine.class).value();
+                            Arrays.stream(value.split("\n")).forEach(string
+                                    -> sb.append("# ").append(string).append("\n"));
+                        }
+                        Map<String, Object> map = new HashMap<>();
+                        map.put(field.getName(), field.get(config));
+                        String line = toml.write(map);
+                        if (field.isAnnotationPresent(Comment.LineEnd.class)) {
+                            line = line.replace("\n", "") +
+                                    " # " +
+                                    field.getAnnotation(Comment.LineEnd.class)
+                                            .value()
+                                            .replace("\n", " ") +
+                                    "\n";
+                        }
+                        sb.append(line);
                     }
-                    Map<String, Object> map = new HashMap<>();
-                    map.put(field.getName(), field.get(config));
-                    sb.append(toml.write(map));
                 }
                 return sb.toString();
             } catch (IllegalAccessException e) {

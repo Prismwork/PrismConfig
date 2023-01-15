@@ -2,7 +2,7 @@ name: publish
 on:
   push:
     paths:
-      - 'gradle.properties'
+      - 'CHANGELOG.md'
     branches:
       - 'main'
 
